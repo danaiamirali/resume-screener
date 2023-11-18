@@ -8,6 +8,7 @@ app.secret_key = 'resume_screener'
 socketio = SocketIO(app, async_mode = 'eventlet')
 
 filename = ""
+from modules.screener import Screener
 
 def highlight():
     global filename
