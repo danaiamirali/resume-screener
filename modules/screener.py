@@ -167,3 +167,21 @@ class Resume:
                     self.resume += rag_chain.invoke(text)
                 except:
                     pass
+
+class Job:
+    def __init__(self, description):
+        llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0)
+
+        essentials_prompt = ChatPromptTemplate.from_template("""
+        Given the below job description, extract the essential skills, if any, verbatim. Return them in the following format (delimited by triple backticks):
+        \"\"\"
+        Essential Skills:
+        - skill 1 (verbatim from resume)
+        - skill 2 (verbatim from resume)
+        ...
+        \"\"\"                                                                                    
+        Description: {resume}
+        Answer:                                           
+        """)
+
+
