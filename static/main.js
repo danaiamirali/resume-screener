@@ -8,5 +8,6 @@ socket.on('event', function() {
 });
 
 socket.on('redirect', function() {
+    console.log('testing')
     window.location.href = 'http://127.0.0.1:5000/results';
 });
