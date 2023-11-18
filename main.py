@@ -1,6 +1,7 @@
 from flask import Flask, redirect, url_for, render_template, request, session
 from flask_socketio import SocketIO
 import fitz
+from modules import Screener
 
 app = Flask(__name__, static_folder="static")
 app.secret_key = 'resume_screener'
@@ -34,6 +35,8 @@ def upload():
 
 @app.route("/results", methods=["POST", "GET"])
 def results():
+    s = Screener()
+    print (s.is_correct_fit())
     return render_template("result.html")
     
 
