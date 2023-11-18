@@ -1,23 +1,29 @@
 from flask import Flask, redirect, url_for, render_template, request, session
 from flask_socketio import SocketIO
 import fitz
-from modules import Screener
+import os
 
 app = Flask(__name__, static_folder="static")
 app.secret_key = 'resume_screener'
 socketio = SocketIO(app, async_mode = 'eventlet')
 
-def highlight(filename):
-    doc = fitz.open('uploads/' + filename)
+filename = ""
+
+def highlight():
+    global filename
+    directory = os.getcwd()
+    filename = os.path.join(directory, "uploads", filename)
+    doc = fitz.open("uploads/Tiernan_Jesrani_Resume.pdf")
     page = doc[0]
     for rect in page.search_for("Tiernan"):
         page.add_highlight_annot(rect)
     doc.close()
-
+    socketio.emit('event', namespace='/upload')
 
 @socketio.on('connect', namespace='/upload')
 def handle_connect():
-    highlight("test")
+    #highlight()
+    socketio.emit('redirect', namespace='/upload')
     # do something
 
 @app.route("/", methods=["POST", "GET"])
@@ -26,8 +32,10 @@ def home():
         if 'resume' not in request.files or request.files['resume'].filename == '':
             return render_template("home.html")
         else:
+            global filename
             job = request.form['job']
             resume = request.files['resume']
+            filename = resume.filename
             resume.save('uploads/' + resume.filename)
             return redirect(url_for("upload"))
     else:
@@ -39,9 +47,8 @@ def upload():
 
 @app.route("/results", methods=["POST", "GET"])
 def results():
-    s = Screener()
-    print (s.is_correct_fit())
-    return render_template("result.html")
+    global filename
+    return render_template("result.html", resume= "uploads/Tiernan_Jesrani_Resume.pdf")
     
 
 
