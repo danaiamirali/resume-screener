@@ -9,7 +9,18 @@ socketio = SocketIO(app, async_mode = 'eventlet')
 
 @app.route("/", methods=["POST", "GET"])
 def home():
-    return "test"
+    if request.method == "POST":
+        resume = request.files['resume']
+        resume.save('uploads/' + resume.filename)
+        return redirect(url_for("upload"))
+    else:
+        return render_template("home.html")
+
+@app.route("/upload", methods=["POST", "GET"])
+def upload():
+    
+    return render_template("upload.html")
+    
 
 
 
