@@ -13,6 +13,7 @@ import os
 
 class Screener:
     def __init__(self):
+        print ("running constructor...")
         load_dotenv()
         API_KEY = os.getenv("OPENAI_API_KEY")
 
@@ -67,6 +68,7 @@ class Screener:
         return "\n\n".join(doc.page_content for doc in docs)
 
     def is_correct_fit(self):
+        print ("running is_correct_fit...")
         prompt = ChatPromptTemplate.from_template("""
         Given the below job description and the candidates relevant skills and experiences, provide a YES or NO answer about whether the candidate is a truly good fit for the job.
         Job Description: {job_description}
