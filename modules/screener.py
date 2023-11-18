@@ -4,7 +4,7 @@ from langchain.schema import StrOutputParser
 from langchain.schema.runnable import RunnablePassthrough
 from langchain.prompts import ChatPromptTemplate
 
-from parsers import ResumeParser, JobDescriptionParser
+from .parsers import ResumeParser, JobDescriptionParser
 
 class Screener:
     def __init__(self, path: str, job_description: str):
