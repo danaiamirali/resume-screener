@@ -15,6 +15,10 @@ def highlight(filename):
     doc.close()
 
 
+@socketio.on('connect', namespace='/upload')
+def handle_connect():
+    highlight("test")
+    # do something
 
 @app.route("/", methods=["POST", "GET"])
 def home():
