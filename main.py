@@ -47,8 +47,7 @@ def upload():
 
 @app.route("/results", methods=["POST", "GET"])
 def results():
-    global filename
-    return render_template("result.html", resume= "uploads/Tiernan_Jesrani_Resume.pdf")
+    return render_template("result.html")
     
 
 
