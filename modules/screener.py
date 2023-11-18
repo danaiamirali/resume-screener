@@ -90,3 +90,80 @@ class Screener:
 
     def weaknesses(self):
         pass
+
+import PyPDF2
+
+class Resume:
+    def __init__(self, path: str):
+        with open(path, 'rb') as file:
+            reader = PyPDF2.PdfReader(file)
+            text = ""
+            for page in reader.pages:
+                text += page.extract_text()
+            
+            llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0)
+
+            skills_prompt = ChatPromptTemplate.from_template("""
+            Given the below resume, extract the candidate's skills, if any, verbatim. Return them in the following format (delimited by triple backticks):
+            \"\"\"
+            Skills:
+            - skill 1 (verbatim from resume)
+            - skill 2 (verbatim from resume)
+            ...
+            \"\"\"                                                                                    
+            Resume: {resume}
+            Answer:                                           
+            """)
+
+            experiences_prompt = ChatPromptTemplate.from_template("""
+            Given the below resume, extract the candidate's experiences, if any, verbatim. Return them in the following format (delimited by triple backticks):
+            \"\"\"
+            Experiences:
+            - experience 1 (date range)
+                - bullet points (verbatim from resume)                                                      
+            - experience 2 (date range)
+                - bullet points (verbatim from resume)
+            ...
+            \"\"\"                                                                                    
+            Resume: {resume}
+            Answer:                                           
+            """)
+
+            education_prompt = ChatPromptTemplate.from_template("""
+            Given the below resume, extract the candidate's education history, if any, verbatim. Return them in the following format (delimited by triple backticks):
+            \"\"\"
+            Education:
+            - education 1 (verbatim from resume)
+            - education 2 (verbatim from resume)
+            ...
+            \"\"\"                                                                                    
+            Resume: {resume}
+            Answer:                                           
+            """)
+
+            interests_prompt = ChatPromptTemplate.from_template("""
+            Given the below resume, extract the candidate's interests, if any, verbatim. Return them in the following format (delimited by triple backticks):
+            \"\"\"
+            Interests:
+            - interest 1 (verbatim from resume)
+            - interest 2 (verbatim from resume)
+            ...
+            \"\"\"                                                                                    
+            Resume: {resume}
+            Answer:                                           
+            """)
+
+            prompts = [skills_prompt, experiences_prompt, education_prompt, interests_prompt]
+            
+            self.resume = "" 
+            for prompt in prompts:
+                rag_chain = (
+                    {"resume": RunnablePassthrough()}
+                    | prompt
+                    | llm
+                    | StrOutputParser()
+                )
+                try: 
+                    self.resume += rag_chain.invoke(text)
+                except:
+                    pass
