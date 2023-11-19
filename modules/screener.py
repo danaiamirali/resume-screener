@@ -124,3 +124,87 @@ class Screener:
         )
 
         return rag_chain.invoke({"job_requirements": self.job_description.essentials, "resume": self.resume.resume})
+
+    def suitable_jobs(self):
+        print ("running suitable_jobs...")
+        prompt = ChatPromptTemplate.from_template("""
+        Given the below list of jobs, and the candidates relevant skills and experiences, pick 3 listed jobs that best suit the candidate.
+        If there are any jobs that are suitable, respond in the following format (delimited by triple backticks) for each job, one after another in the style of a python list:
+        \"\"\"
+        (
+        "the job title",
+        )
+        \"\"\"
+        Job List:
+        Accounting 
+        Accounting and Finance 
+        Account Management 
+        Account Management/Customer Success 
+        Administration and Office 
+        Advertising and Marketing 
+        Animal Care 
+        Arts 
+        Business Operations 
+        Cleaning and Facilities 
+        Computer and IT 
+        Construction 
+        Corporate 
+        Customer Service 
+        Data and Analytics 
+        Data Science 
+        Design 
+        Design and UX Editor 
+        Education 
+        Energy Generation and Mining 
+        Entertainment and Travel Services 
+        Farming and Outdoors 
+        Food and Hospitality Services 
+        Healthcare 
+        HR 
+        Human Resources and Recruitment 
+        Installation, Maintenance, and Repairs 
+        IT 
+        Law 
+        Legal Services 
+        Management 
+        Manufacturing and Warehouse 
+        Marketing 
+        Mechanic 
+        Media, PR, and Communications 
+        Mental Health 
+        Nurses 
+        Office Administration 
+        Personal Care and Services 
+        Physical Assistant 
+        Product 
+        Product Management 
+        Project Management 
+        Protective Services 
+        Public Relations 
+        Real Estate 
+        Recruiting 
+        Retail 
+        Sales 
+        Science and Engineering 
+        Social Services 
+        Software Engineer 
+        Software Engineering 
+        Sports, Fitness, and Recreation 
+        Transportation and Logistics 
+        Unknown 
+        UX 
+        Videography 
+        Writer 
+        Writing and Editing
+        Resume: {resume}
+        Answer:                                           
+        """)
+
+        rag_chain = (
+            {"resume": RunnablePassthrough()}
+            | prompt
+            | self.llm
+            | StrOutputParser()
+        )
+
+        return rag_chain.invoke({"resume": self.resume.resume})

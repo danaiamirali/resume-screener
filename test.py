@@ -48,11 +48,17 @@ def init_strengths():
 def init_weaknesses():
     print(s.weaknesses())
 
+def init_jobs():
+    print(s.suitable_jobs())
+
 strength_thread = Thread(target = init_strengths)
 weakness_thread = Thread(target = init_weaknesses)
+jobs_thread = Thread(target = init_jobs)
 
 strength_thread.start()
 weakness_thread.start()
+jobs_thread.start()
 
 strength_thread.join()
 weakness_thread.join()
+jobs_thread.join()
