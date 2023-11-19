@@ -116,20 +116,22 @@
       <div class="container">
 
         <div class="section-title" data-aos="zoom-out">
-          <h2>About</h2>
-        </div>
-
-        <div class="row content" data-aos="fade-up">
-          <div class="col-lg-6">
-            <p>
-              Get instant feedback on your resume
-            </p>
-            <ul>
-              <li><i class="ri-check-double-line"></i> Feature 1</li>
-              <li><i class="ri-check-double-line"></i> Feature 2</li>
-              <li><i class="ri-check-double-line"></i> Feature 3</li>
-            </ul>
-          </div>
+            <div class="section-title" data-aos="zoom-out">
+                <h2>Best Job Matches</h2>
+              </div>
+      
+              <div class="row">
+                <form action="#" method="post" enctype="multipart/form-data">
+                <div class="col-lg-4 col-md-6">
+                  <div class="icon-box" data-aos="zoom-in-left">
+                    <h4 class="title"><a href="">Upload Resume</a></h4>
+                    <input type="file" id="resume" name="resume" accept=".pdf">
+                    <input type="hidden" name="action" value="match">
+                    <input type="submit" value="Upload">
+                  </div>
+                </div>
+                </form> 
+                </div>
         </div>
 
       </div>
@@ -140,7 +142,7 @@
         <div class="container">
   
           <div class="section-title" data-aos="zoom-out">
-            <h2>Upload Resume and Paste Job Description</h2>
+            <h2>Role Compatability</h2>
           </div>
   
           <div class="row">
@@ -155,6 +157,7 @@
               <div class="icon-box" data-aos="zoom-in-left" data-aos-delay="100">
                 <h4 class="title"><a href="">Paste Job Description</a></h4>
                 <input type="text" id="job" name="job">
+                <input type="hidden" name="action" value="compatability">
                 <input type="submit" value="Upload">
               </div>
             </div>

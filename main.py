@@ -13,6 +13,8 @@ socketio = SocketIO(app, async_mode = 'eventlet')
 filename = ""
 job = ""
 str = ""
+job = ""
+match = True
 
 from modules.screener import Screener
 
@@ -81,12 +83,21 @@ def handle_connect():
 @app.route("/", methods=["POST", "GET"])
 def home():
     if request.method == "POST":
+        action = request.form.get('action')
         if 'resume' not in request.files or request.files['resume'].filename == '':
             return render_template("home.html")
         else:
             global filename
+<<<<<<< Updated upstream
             global job
             job = request.form['job']
+=======
+            if action == "compatability":
+                global job
+                global match
+                job = request.form['job']
+                match = False
+>>>>>>> Stashed changes
             resume = request.files['resume']
             filename = "static/" + resume.filename
             resume.save('static/' + resume.filename)
