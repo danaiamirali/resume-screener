@@ -35,7 +35,7 @@ class Screener:
             | StrOutputParser()
         )
 
-        return rag_chain.invoke(self.job_description.requirements, self.resume.resume)
+        return rag_chain.invoke({"job_description": self.job_description.requirements, "resume": self.resume.resume})
 
     def strengths(self):
         pass

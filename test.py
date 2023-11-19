@@ -37,3 +37,4 @@ job_desc = """
 
 print ("test.py started...")
 s = Screener("static/resume.pdf", job_desc)
+print(s.is_correct_fit())

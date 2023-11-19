@@ -125,13 +125,13 @@ class JobDescriptionParser:
         """)
 
         rag_chain = (
-            {"job_description": description, "context": essentials}
+            {"job_description": RunnablePassthrough(), "context": RunnablePassthrough()}
             | desirables_prompt
             | llm
             | StrOutputParser()
         )
 
-        desirables = rag_chain.invoke(description, essentials)
+        desirables = rag_chain.invoke({"job_description": description, "context": essentials})
 
         self.requirements = essentials + "\n" + desirables
 
