@@ -7,6 +7,7 @@ from langchain.prompts import ChatPromptTemplate
 
 class ResumeParser:
     def __init__(self, path: str):
+        print ("parsing resume...")
         with open(path, 'rb') as file:
             reader = PyPDF2.PdfReader(file)
             text = ""
@@ -84,6 +85,7 @@ class ResumeParser:
 
 class JobDescriptionParser:
     def __init__(self, description: str):
+        print ("parsing job description...")
         llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0)
         
         essentials_prompt = ChatPromptTemplate.from_template("""
@@ -100,7 +102,7 @@ class JobDescriptionParser:
         """)
 
         rag_chain = (
-            {"resume": RunnablePassthrough()}
+            {"job_description": RunnablePassthrough()}
             | essentials_prompt
             | llm
             | StrOutputParser()
