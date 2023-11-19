@@ -1,7 +1,9 @@
 from flask import Flask, redirect, url_for, render_template, request, session
 from flask_socketio import SocketIO
+from fitz.utils import getColor
 import fitz
 import os
+
 
 app = Flask(__name__, static_folder="static")
 app.secret_key = 'resume_screener'
@@ -12,19 +14,34 @@ str = ""
 
 from modules.screener import Screener
 
-def highlight():
+#list, each index list of pairs, first index string to highlight, second is color
+#feed in colors as string names
+def highlight(hi_list):
     global filename
-    directory = os.getcwd()
-    filename = os.path.join(directory, "uploads", filename)
-    doc = fitz.open("uploads/Tiernan_Jesrani_Resume.pdf")
+    file = filename[3:]
+    doc = fitz.open(file)
     page = doc[0]
-    for rect in page.search_for("Tiernan"):
-        page.add_highlight_annot(rect)
+    for pair in hi_list:
+        text_instances = page.search_for(pair[0])
+        color = getColor(pair[1])
+        highlight = page.add_highlight_annot(text_instances)
+        highlight.set_colors(stroke=color)
+        highlight.update()
+
+    #text_instances = page.search_for("Tiernan")      
+    #page.add_highlight_annot(text_instances)
+    
+    file1 = file[:-4]
+    file1 = file1 + '1.pdf'
+    filename = "../" + file1
+    doc.save(file1)
     doc.close()
+    file = file1
     socketio.emit('event', namespace='/upload')
 
 @socketio.on('connect', namespace='/upload')
 def handle_connect():
+<<<<<<< Updated upstream
     #highlight()
     global str
     job_desc = """
@@ -63,6 +80,10 @@ def handle_connect():
     """
     s = Screener("static/resume.pdf", job_desc)
     str = s.is_correct_fit()
+=======
+    hi_list = []
+    highlight(hi_list)
+>>>>>>> Stashed changes
     socketio.emit('redirect', namespace='/upload')
     # do something
 
@@ -75,8 +96,8 @@ def home():
             global filename
             job = request.form['job']
             resume = request.files['resume']
-            filename = resume.filename
-            resume.save('uploads/' + resume.filename)
+            filename = "../static/" + resume.filename
+            resume.save('static/' + resume.filename)
             return redirect(url_for("upload"))
     else:
         return render_template("home.html")
@@ -87,8 +108,12 @@ def upload():
 
 @app.route("/results", methods=["POST", "GET"])
 def results():
+<<<<<<< Updated upstream
     global str
     return render_template("result.html", str=str)
+=======
+    return render_template("result.html", path=filename)
+>>>>>>> Stashed changes
     
 
 
