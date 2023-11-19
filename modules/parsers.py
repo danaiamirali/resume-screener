@@ -67,9 +67,11 @@ class ResumeParser:
             """)
 
             prompts = [skills_prompt, experiences_prompt, education_prompt, interests_prompt]
-            
+            threads = []
             self.resume = "" 
             for prompt in prompts:
+                threads.append(Thread(target = lambda x : ))
+
                 rag_chain = (
                     {"resume": RunnablePassthrough()}
                     | prompt

@@ -1,0 +1,18 @@
+[
+("Applied project experience with Large Language Models and other applied AI techniques OR advanced coursework", "The candidate does not have any specific mention of applied project experience with Large Language Models or other applied AI techniques. They also do not mention any advanced coursework in AI."),
+("General skills in Data Science, good software development skills, and a willingness to quickly develop new technical skills as required for the project", "The candidate does not mention any specific skills in Data Science. They do mention good software development skills, but it is unclear if they have the willingness to quickly develop new technical skills as required for the project."),
+("General Programming skills, good software engineering practice and design, and a willingness to quickly develop new technical skills as required for the project", "The candidate mentions programming skills, but it is unclear if they have good software engineering practice and design. It is also unclear if they have the willingness to quickly develop new technical skills as required for the project."),
+("EECS 281 (or equivalent) is required", "The candidate does mention taking EECS 281 - Data Structures and Algorithms, so they meet this requirement.")
+]
+
+
+[
+(
+"Experienced in both self-guided freelance work and collaborative team projects, showcasing excellent teamwork and interpersonal skills.",
+"The candidate's experience in both self-guided freelance work and collaborative team projects demonstrates their ability to work independently and as part of a team. This is a strength as it shows their adaptability and ability to work well with others, which is important for the job."
+),
+(
+"Particularly strong interest in the fields of machine learning and artificial intelligence, and actively seeking to apply diverse skillset to innovative challenges in computer science.",
+"The candidate's strong interest in machine learning and artificial intelligence aligns with the job's requirement for applied project experience with large language models and other applied AI techniques. Their desire to apply their diverse skillset to innovative challenges in computer science is a strength as it shows their enthusiasm and motivation for the job."
+)
+]
