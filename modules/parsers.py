@@ -43,7 +43,7 @@ class ResumeParser:
             """)
 
             education_prompt = ChatPromptTemplate.from_template("""
-            Given the below resume, extract the candidate's education history, if any, verbatim. Return them in the following format (delimited by triple backticks):
+            Given the below resume, extract the candidate's education history and any listed classes, if any, verbatim. Return them in the following format (delimited by triple backticks):
             \"\"\"
             Education:
             - education 1 (verbatim from resume)
@@ -134,5 +134,6 @@ class JobDescriptionParser:
         desirables = rag_chain.invoke({"job_description": description, "context": essentials})
 
         self.requirements = essentials + "\n" + desirables
+        self.essentials = essentials
 
         

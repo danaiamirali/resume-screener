@@ -41,4 +41,26 @@ class Screener:
         pass
 
     def weaknesses(self):
-        pass
+        print ("running weaknesses...")
+        prompt = ChatPromptTemplate.from_template("""
+        Given the below job requirements, if there are any requirements the candidate does not meet, definitively give your answers in the following format (delimited by triple backticks), one after another in the style of a python list:
+        \"\"\"
+        [pair1, pair2, ... pairN] where pairI =                                          
+        (
+        "the relevant snippet, verbatim, from the job requirements",
+        "your commentary on what is lacking from the candidate's resume"                                                                              
+        )
+        \"\"\"        
+        Job Requirements: {job_requirements}
+        Resume: {resume}
+        Answer:                                           
+        """)
+
+        rag_chain = (
+            {"job_requirements": RunnablePassthrough(), "resume": RunnablePassthrough()}
+            | prompt
+            | self.llm
+            | StrOutputParser()
+        )
+
+        return rag_chain.invoke({"job_requirements": self.job_description.essentials, "resume": self.resume.resume})
