@@ -11,15 +11,32 @@ from langchain.vectorstores import Chroma
 
 from .parsers import ResumeParser, JobDescriptionParser
 
+from threading import Thread
+
 class Screener:
     def __init__(self, path: str, job_description: str):
-        print ("running constructor...")
+        print("running constructor...")
         load_dotenv()
 
         self.llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0)
         self.path = path
-        self.resume = ResumeParser(path)
-        self.job_description = JobDescriptionParser(job_description)
+        
+        # Create threads for parser initializations
+        def init_resume_parser():
+            self.resume = ResumeParser(path)
+
+        def init_job_description_parser():
+            self.job_description = JobDescriptionParser(job_description)
+        
+        # Start the threads
+        resume_thread = Thread(target=init_resume_parser)
+        job_description_thread = Thread(target=init_job_description_parser)
+        resume_thread.start()
+        job_description_thread.start()
+        
+        # Wait for both threads to complete
+        resume_thread.join()
+        job_description_thread.join()
     
     def format_docs(docs):
         return "\n\n".join(doc.page_content for doc in docs)

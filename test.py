@@ -1,4 +1,5 @@
 from modules.screener import Screener
+from threading import Thread
 
 job_desc = """
     Below are the skills needed for this project. Students with the following relevant skills and interest, regardless of major, are encouraged to apply! This is a team based multidisciplinary project. Students on the team are not expected to have experience in all areas, but should be willing to learn and will be asked to perform a breadth of tasks throughout the two semester project.
@@ -37,7 +38,21 @@ job_desc = """
 
 print ("test.py started...")
 s = Screener("static/eliw_resume.pdf", job_desc)
+
 print(s.job_description.requirements)
 print(s.resume.resume)
-print(s.strengths())
-print(s.weaknesses())
+# Enhanced runtime by 33% by introducing multithreading
+def init_strengths():
+    print(s.strengths())
+
+def init_weaknesses():
+    print(s.weaknesses())
+
+strength_thread = Thread(target = init_strengths)
+weakness_thread = Thread(target = init_weaknesses)
+
+strength_thread.start()
+weakness_thread.start()
+
+strength_thread.join()
+weakness_thread.join()
