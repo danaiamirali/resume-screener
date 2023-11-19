@@ -5,6 +5,8 @@ from langchain.schema import StrOutputParser
 from langchain.schema.runnable import RunnablePassthrough
 from langchain.prompts import ChatPromptTemplate
 
+from threading import Thread
+
 class ResumeParser:
     def __init__(self, path: str):
         print ("parsing resume...")
@@ -70,7 +72,6 @@ class ResumeParser:
             threads = []
             self.resume = "" 
             for prompt in prompts:
-                threads.append(Thread(target = lambda x : ))
 
                 rag_chain = (
                     {"resume": RunnablePassthrough()}
@@ -78,10 +79,14 @@ class ResumeParser:
                     | llm
                     | StrOutputParser()
                 )
-                try: 
-                    self.resume += rag_chain.invoke(text)
-                except:
-                    pass
+
+                threads.append(Thread(target = lambda _ : self.resume += rag_chain.invoke(text)))
+
+            for thread in threads:
+                thread.start()
+            
+            for thread in threads:
+                thread.join()
 
 
 
