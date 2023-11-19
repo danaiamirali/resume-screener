@@ -1,8 +1,9 @@
-from flask import Flask, redirect, url_for, render_template, request, session
+from flask import Flask, redirect, url_for, render_template, request
 from flask_socketio import SocketIO
 from fitz.utils import getColor
 import fitz
 import os
+import eventlet
 
 from threading import Thread
 
@@ -88,20 +89,52 @@ def home():
             return render_template("home.html")
         else:
             global filename
-<<<<<<< Updated upstream
-            global job
-            job = request.form['job']
-=======
             if action == "compatability":
                 global job
                 global match
                 job = request.form['job']
                 match = False
->>>>>>> Stashed changes
             resume = request.files['resume']
             filename = "static/" + resume.filename
             resume.save('static/' + resume.filename)
-            return redirect(url_for("upload"))
+
+            
+
+            s = Screener(filename, job)
+            strengths = None
+            weaknesses = None
+
+            def init_strengths():
+                print("running strengths...")
+                strengths = s.strengths()
+                print("strengths: ", strengths)
+
+            def init_weaknesses():
+                print("running weaknesses...")
+                weaknesses = s.weaknesses()
+                print("weaknesses: ", weaknesses)
+
+            strength_thread = Thread(target = init_strengths)
+            weakness_thread = Thread(target = init_weaknesses)
+            strength_thread.start()
+            weakness_thread.start()
+            strength_thread.join()
+            weakness_thread.join()
+            print("check")
+            strengths = eval(strengths)
+            weaknesses = eval(weaknesses)
+            print("test")
+            hi_list = []   
+
+            for i in strengths:
+                hi_list.append((i[0], "green"))
+            for i in weaknesses:
+                hi_list.append((i[0], "red"))
+            highlight(hi_list)
+            print(strengths)
+            print(weaknesses)
+
+            return redirect(url_for("results"))
     else:
         return render_template("home.html")
 
@@ -114,4 +147,5 @@ def results():
     return render_template("result.html", path=filename)
 
 if __name__ == "__main__":
+    eventlet.monkey_patch()
     socketio.run(app, debug=True)
