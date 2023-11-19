@@ -70,7 +70,7 @@ class ResumeParser:
 
             prompts = [skills_prompt, experiences_prompt, education_prompt, interests_prompt]
             threads = []
-            self.resume = "" 
+            self.resume = []
             for prompt in prompts:
 
                 rag_chain = (
@@ -80,13 +80,23 @@ class ResumeParser:
                     | StrOutputParser()
                 )
 
-                threads.append(Thread(target = lambda _ : self.resume += rag_chain.invoke(text)))
+                def append_res(rag_chain = rag_chain, text = text):
+                    self.resume.append(rag_chain.invoke(text))
+
+                thread = Thread(target = append_res)
+
+                threads.append(thread)
 
             for thread in threads:
                 thread.start()
             
             for thread in threads:
                 thread.join()
+
+            resume_str = ""
+            for entry in self.resume:
+                resume_str += entry
+            self.resume = resume_str
 
 
 
